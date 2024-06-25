@@ -227,7 +227,6 @@ class SphinxEngine extends AbstractEngine
             ->select('*', SphinxQL::expr('WEIGHT() AS weight'))
             ->from($index);
 
-
         if ($builder->callback) {
             call_user_func(
                 $builder->callback,
@@ -236,7 +235,6 @@ class SphinxEngine extends AbstractEngine
         } else {
             $query->match('*', SphinxQL::expr('"' . str_replace('"', '\"', $builder->query) . '"/1.0'));
         }
-
 
         if (!empty($ranker)) {
             $query->option('ranker', $ranker);
