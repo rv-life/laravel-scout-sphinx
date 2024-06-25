@@ -225,8 +225,18 @@ class SphinxEngine extends AbstractEngine
 
         $query = $this->sphinx
             ->select('*', SphinxQL::expr('WEIGHT() AS weight'))
-            ->from($index)
-            ->match('*', SphinxQL::expr('"' . str_replace('"', '\"', $builder->query) . '"/1.0'));
+            ->from($index);
+
+
+        if ($builder->callback) {
+            call_user_func(
+                $builder->callback,
+                $query
+            );
+        } else {
+            $query->match('*', SphinxQL::expr('"' . str_replace('"', '\"', $builder->query) . '"/1.0'));
+        }
+
 
         if (!empty($ranker)) {
             $query->option('ranker', $ranker);
@@ -240,13 +250,6 @@ class SphinxEngine extends AbstractEngine
 
         foreach ($this->whereIns as $whereIn) {
             $query->where(key($whereIn), 'IN', $whereIn[key($whereIn)]);
-        }
-
-        if ($builder->callback) {
-            call_user_func(
-                $builder->callback,
-                $query
-            );
         }
 
         if (empty($builder->orders)) {
