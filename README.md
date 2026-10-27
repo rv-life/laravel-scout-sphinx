@@ -11,7 +11,7 @@ A Laravel Scout driver that lets a Laravel app search its models through a Sphin
 - Cleanup decision: Keep, as given by the person running this prompt. The audit sheet is the record.
 
 ## Owner
-- Team: @rv-life/ops-team, as given by the person running this prompt from the audit sheet. The .github/CODEOWNERS file added with this README names the same team.
+- Team: @rv-life/ops-devs, as given by the person running this prompt, and named in the .github/CODEOWNERS file added with this README. Ops Devs is a child team of @rv-life/ops-team, which the audit sheet lists as the owner.
 - Where to ask: Unknown. No file names a Slack channel or contact.
 
 ## What it does
