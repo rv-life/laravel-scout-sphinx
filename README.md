@@ -41,9 +41,10 @@ The package is complete and in use. The last change, in June 2024 (OPS-760), add
 - Environments: none defined in the repo.
 
 ## Runtimes and versions
+
 | Runtime | Version the code allows | CI or build version | Meets the floor |
 |---|---|---|---|
-| PHP | `^7.1\|^8.0` (composer.json). This range allows PHP 8.4 but does not require it, and it also allows PHP 7.1 to 8.3. | No GitHub workflow. .travis.yml lists PHP 7.1, 7.2 and 7.3. | No. The floor is PHP 8.4 or newer, and the constraint still admits end-of-life versions. |
+| PHP | `^7.1\|^8.0` (composer.json). This range admits PHP 7.1 and every later 7.x release, and every 8.x release. It allows PHP 8.4 and later 8.x versions, but it also admits every version below 8.4. | No GitHub workflow. .travis.yml lists PHP 7.1, 7.2 and 7.3. | No. The floor is PHP 8.4 or newer, and the constraint still admits end-of-life versions. |
 | laravel/scout | `>=5.0` (composer.json), with no upper bound. | Not tested in the repo. | Not applicable (library, no floor), but see Needs attention. |
 | foolz/sphinxql-query-builder | `^3.0` (composer.json). | Not tested in the repo. | Not applicable (library, no floor). |
 
@@ -72,7 +73,7 @@ This is a library, so it runs inside a Laravel app. The steps below come from th
 Environment variables (names only):
 - `SCOUT_DRIVER`: the Scout driver to use; `sphinxsearch` for this package.
 - `SPHINX_HOST`: the Sphinx server host.
-- `SPHINX_PORT`: the Sphinx SphinxQL port.
+- `SPHINX_PORT`: the SphinxQL port on the Sphinx server.
 - `SPHINX_SOCKET`: a Unix socket to use instead of host and port. Left out of the connection when empty.
 - `SPHINX_CHARSET`: the connection charset.
 
@@ -84,8 +85,8 @@ Usage in a model:
 ```php
 $orders = App\Order::search('Star Trek')->get();
 
-$orders = App\Order::search($keyword, function (SphinxQL $query) {
-        return $query->groupBy('description');
+$orders = App\Order::search($keyword, function (SphinxQL $query) use ($keyword) {
+        return $query->match('*', $keyword)->groupBy('description');
     })
     ->where('status', 1)
     ->orderBy('date', 'DESC')
